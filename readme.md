@@ -1,4 +1,4 @@
-# yeoman-assert [![Build Status](https://travis-ci.org/stefanbuck/yeoman-assert.svg?branch=master)](https://travis-ci.org/stefanbuck/yeoman-assert)
+# yeoman-assert [![Build Status](https://travis-ci.org/yeoman/yeoman-assert.svg?branch=master)](https://travis-ci.org/yeoman/yeoman-assert)
 
 > Assert utility from [yeoman](http://github.com/yeoman/generator)
 
@@ -75,13 +75,13 @@ assert.fileContent([
    ['controllers/user.js', /App\.UserController = Ember\.ObjectController\.extend/]
 ]);
 ```
- 
+
 
 ### #noFileContent
 
 - **file** (String|Array) Path to a file.
 - **reg** (Regex|String) Regex or string that will be used to search the file.
- 
+
 Assert that a file's content does not matche a string.
 
 ```
@@ -120,7 +120,7 @@ assert.textEqual('I have a yellow cat', 'I have a yellow cat');
 
 - **subject** (Object) Subject implementing the façade.
 - **methods** (Object|Array) A façace, hash or array of keys to be implemented.
- 
+
 Assert an Object implements an interface.
 
 ```

@@ -1,7 +1,0 @@
-fixtures/
-test.js
-.npmignore
-.editorconfig
-.travis.yml
-.jshintrc
-.gitattributes
