@@ -4,16 +4,19 @@
  * It mixes in the native node.js `assert` module. So you can just use this module as a
  * drop-in replacement.
  *
- * @module test/assert
  * @mixes nodejs/assert
  * @example
- *   var assert = require('yeoman-generator').assert;
+ *   var assert = require('yeoman-assert');
  */
 'use strict';
 
 var fs = require('fs');
 var _ = require('lodash');
-var helpers = require('./helpers');
+var chalk = require('chalk');
+
+function deprecate (message) {
+  console.log(chalk.yellow('(!) ') + message);
+}
 
 function extractMethods(methods) {
   return _.isArray(methods) ? methods : Object.keys(methods).filter(function (method) {
@@ -22,7 +25,6 @@ function extractMethods(methods) {
 }
 
 // Extend the native assert module
-/** @alias module:test/assert */
 var assert = module.exports = require('assert');
 
 /**
@@ -53,7 +55,7 @@ assert.file = function () {
   if (_.last(args) instanceof RegExp) {  // DEPRECATED CASE
     var depMsg = 'assert.file(String, RegExp) DEPRECATED; use ';
     depMsg += 'assert.fileContent(String, RegExp) instead.';
-    helpers.deprecate(depMsg);
+    deprecate(depMsg);
     assert.fileContent(args[0], args[1]);
   } else {
     args = _.isString(args[0]) ? args : args[0];
@@ -106,7 +108,7 @@ assert.files = function (files) {
   var depMsg = 'assert.files deprecated. Use ';
   depMsg += 'assert.file([String, String, ...]) or ';
   depMsg += 'assert.file([[String, RegExp], [String, RegExp]...]) instead.';
-  helpers.deprecate(depMsg);
+  deprecate(depMsg);
   files.forEach(function (item) {
     var file = item;
     var rx;

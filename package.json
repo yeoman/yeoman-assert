@@ -1,0 +1,33 @@
+{
+  "name": "yeoman-assert",
+  "version": "1.0.0",
+  "description": "Assert utility from yeoman",
+  "license": "BSD",
+  "keywords": [
+    "assert",
+    "utility",
+    "helper",
+    "yeoman"
+  ],
+  "homepage": "http://yeoman.io",
+  "author": "The Yeoman Team",
+  "repository": "yeoman/yeoman-assert",
+  "files": [
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "jshint *.js && jscs *.js && mocha"
+  },
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "jscs": "^1.7.3",
+    "jshint": "^2.5.10",
+    "mocha": "^2.0.1"
+  }
+}
