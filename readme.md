@@ -53,7 +53,7 @@ assert.noFile(['templates/user.hbs', 'templates/user/edit.hbs']);
 
 - **file** (String|Array) Path to a file.
 - **reg** (Regex|String) Regex or string that will be used to search the file.
- 
+
 Assert that a file's content matches a string.
 
 ```
@@ -82,14 +82,14 @@ assert.fileContent([
 - **file** (String|Array) Path to a file.
 - **reg** (Regex|String) Regex or string that will be used to search the file.
 
-Assert that a file's content does not matche a string.
+Assert that a file's content does not match a string.
 
 ```
 assert.fileContent('models/user.js', 'App.User = DS.Model.extend');
 
 ```
 
-Assert that a file's content does not matche a regex.
+Assert that a file's content does not match a regex.
 
 ```
 assert.fileContent('models/user.js', /App\.User = DS\.Model\.extend/);
