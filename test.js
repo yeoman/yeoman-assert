@@ -31,16 +31,6 @@ describe('generators.assert', function () {
     it('reject multiple files one of which does not exist', function () {
       assert.throws(yoAssert.file.bind(yoAssert, ['testFile', 'intangibleTestFile']));
     });
-
-    // DEPRECATED
-
-    it('accept a file with content that matches reg', function () {
-      assert.doesNotThrow(yoAssert.file.bind(yoAssert, 'testFile', /Roses are red/));
-    });
-
-    it('reject a file with content does not match reg', function () {
-      assert.throws(yoAssert.file.bind(yoAssert, 'testFile', /Roses are blue/));
-    });
   });
 
   describe('.noFile()', function () {
@@ -60,34 +50,6 @@ describe('generators.assert', function () {
     it('reject an array of files one of which exists', function () {
       assert.throws(
         yoAssert.noFile.bind(yoAssert, ['testFile', 'etherealTestFile']));
-    });
-  });
-
-  describe('.files()', function () {  // DEPRECATED
-    it('accept an array of files all of which exist', function () {
-      assert.doesNotThrow(
-        yoAssert.files.bind(yoAssert, ['testFile', 'testFile2']));
-    });
-
-    it('reject an array of multiple files one of which exists', function () {
-      assert.throws(
-        yoAssert.files.bind(yoAssert, ['testFile', 'etherealTestFile']));
-    });
-
-    it('accept an array of file/regex pairs when each file\'s content matches the corresponding regex', function () {
-      var arg = [
-        ['testFile', /Roses are red/],
-        ['testFile2', /Violets are blue/]
-      ];
-      assert.doesNotThrow(yoAssert.files.bind(yoAssert, arg));
-    });
-
-    it('reject an array of file/regex pairs when one file\'s content does not matches the corresponding regex', function () {
-      var arg = [
-        ['testFile', /Roses are red/],
-        ['testFile2', /Violets are orange/]
-      ];
-      assert.throws(yoAssert.files.bind(yoAssert, arg));
     });
   });
 

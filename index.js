@@ -12,11 +12,6 @@
 
 var fs = require('fs');
 var _ = require('lodash');
-var chalk = require('chalk');
-
-function deprecate (message) {
-  console.log(chalk.yellow('(!) ') + message);
-}
 
 function extractMethods(methods) {
   return _.isArray(methods) ? methods : Object.keys(methods).filter(function (method) {
@@ -39,31 +34,15 @@ var assert = module.exports = require('assert');
  * @param {Array}         paths    - an array of paths to files
  * @example
  * assert.file(['templates/user.hbs', 'templates/user/edit.hbs']);
- *
- * @also
- *
- * Assert that a file's content matches a regex
- * @deprecated
- * @param  {String}       path     - path to a file
- * @param  {Regex}        reg      - regex that will be used to search the file
- * @example
- * assert.file('models/user.js', /App\.User = DS\.Model\.extend/);
  */
 
 assert.file = function () {
   var args = _.toArray(arguments);
-  if (_.last(args) instanceof RegExp) {  // DEPRECATED CASE
-    var depMsg = 'assert.file(String, RegExp) DEPRECATED; use ';
-    depMsg += 'assert.fileContent(String, RegExp) instead.';
-    deprecate(depMsg);
-    assert.fileContent(args[0], args[1]);
-  } else {
-    args = _.isString(args[0]) ? args : args[0];
-    args.forEach(function (file) {
-      var here = fs.existsSync(file);
-      assert.ok(here, file + ', no such file or directory');
-    });
-  }
+  args = _.isString(args[0]) ? args : args[0];
+  args.forEach(function (file) {
+    var here = fs.existsSync(file);
+    assert.ok(here, file + ', no such file or directory');
+  });
 };
 
 /**
@@ -86,39 +65,6 @@ assert.noFile = function () {
   args.forEach(function (file) {
     var here = fs.existsSync(file);
     assert.ok(!here, file + ' exists');
-  });
-};
-
-/**
- * Assert that each of an array of files exists. If an item is an array with
- * the first element a filepath and the second element a regex, check to see
- * that the file content matches the regex
- *
- * @deprecated
- * @param {Array} pairs - an array of paths to files or file/regex subarrays
- *
- * @example
- * file(['templates/user.hbs', 'templates/user/edit.hbs']);
- *
- * @example
- * files(['foo.js', 'bar.js', ['baz.js', /function baz/]]);
- */
-
-assert.files = function (files) {
-  var depMsg = 'assert.files deprecated. Use ';
-  depMsg += 'assert.file([String, String, ...]) or ';
-  depMsg += 'assert.file([[String, RegExp], [String, RegExp]...]) instead.';
-  deprecate(depMsg);
-  files.forEach(function (item) {
-    var file = item;
-    var rx;
-    if (item instanceof Array) {
-      file = item[0];
-      rx = item[1];
-      assert.fileContent(file, rx);
-    } else {
-      assert.file(file);
-    }
   });
 };
 
