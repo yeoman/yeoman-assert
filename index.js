@@ -39,31 +39,15 @@ var assert = module.exports = require('assert');
  * @param {Array}         paths    - an array of paths to files
  * @example
  * assert.file(['templates/user.hbs', 'templates/user/edit.hbs']);
- *
- * @also
- *
- * Assert that a file's content matches a regex
- * @deprecated
- * @param  {String}       path     - path to a file
- * @param  {Regex}        reg      - regex that will be used to search the file
- * @example
- * assert.file('models/user.js', /App\.User = DS\.Model\.extend/);
  */
 
 assert.file = function () {
   var args = _.toArray(arguments);
-  if (_.last(args) instanceof RegExp) {  // DEPRECATED CASE
-    var depMsg = 'assert.file(String, RegExp) DEPRECATED; use ';
-    depMsg += 'assert.fileContent(String, RegExp) instead.';
-    deprecate(depMsg);
-    assert.fileContent(args[0], args[1]);
-  } else {
-    args = _.isString(args[0]) ? args : args[0];
-    args.forEach(function (file) {
-      var here = fs.existsSync(file);
-      assert.ok(here, file + ', no such file or directory');
-    });
-  }
+  args = _.isString(args[0]) ? args : args[0];
+  args.forEach(function (file) {
+    var here = fs.existsSync(file);
+    assert.ok(here, file + ', no such file or directory');
+  });
 };
 
 /**

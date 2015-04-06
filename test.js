@@ -31,16 +31,6 @@ describe('generators.assert', function () {
     it('reject multiple files one of which does not exist', function () {
       assert.throws(yoAssert.file.bind(yoAssert, ['testFile', 'intangibleTestFile']));
     });
-
-    // DEPRECATED
-
-    it('accept a file with content that matches reg', function () {
-      assert.doesNotThrow(yoAssert.file.bind(yoAssert, 'testFile', /Roses are red/));
-    });
-
-    it('reject a file with content does not match reg', function () {
-      assert.throws(yoAssert.file.bind(yoAssert, 'testFile', /Roses are blue/));
-    });
   });
 
   describe('.noFile()', function () {
