@@ -12,11 +12,6 @@
 
 var fs = require('fs');
 var _ = require('lodash');
-var chalk = require('chalk');
-
-function deprecate (message) {
-  console.log(chalk.yellow('(!) ') + message);
-}
 
 function extractMethods(methods) {
   return _.isArray(methods) ? methods : Object.keys(methods).filter(function (method) {
