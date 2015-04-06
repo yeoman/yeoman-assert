@@ -74,39 +74,6 @@ assert.noFile = function () {
 };
 
 /**
- * Assert that each of an array of files exists. If an item is an array with
- * the first element a filepath and the second element a regex, check to see
- * that the file content matches the regex
- *
- * @deprecated
- * @param {Array} pairs - an array of paths to files or file/regex subarrays
- *
- * @example
- * file(['templates/user.hbs', 'templates/user/edit.hbs']);
- *
- * @example
- * files(['foo.js', 'bar.js', ['baz.js', /function baz/]]);
- */
-
-assert.files = function (files) {
-  var depMsg = 'assert.files deprecated. Use ';
-  depMsg += 'assert.file([String, String, ...]) or ';
-  depMsg += 'assert.file([[String, RegExp], [String, RegExp]...]) instead.';
-  deprecate(depMsg);
-  files.forEach(function (item) {
-    var file = item;
-    var rx;
-    if (item instanceof Array) {
-      file = item[0];
-      rx = item[1];
-      assert.fileContent(file, rx);
-    } else {
-      assert.file(file);
-    }
-  });
-};
-
-/**
  * Assert that a file's content matches a regex or string
  * @param  {String}       file     - path to a file
  * @param  {Regex|String} reg      - regex / string that will be used to search the file

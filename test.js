@@ -53,34 +53,6 @@ describe('generators.assert', function () {
     });
   });
 
-  describe('.files()', function () {  // DEPRECATED
-    it('accept an array of files all of which exist', function () {
-      assert.doesNotThrow(
-        yoAssert.files.bind(yoAssert, ['testFile', 'testFile2']));
-    });
-
-    it('reject an array of multiple files one of which exists', function () {
-      assert.throws(
-        yoAssert.files.bind(yoAssert, ['testFile', 'etherealTestFile']));
-    });
-
-    it('accept an array of file/regex pairs when each file\'s content matches the corresponding regex', function () {
-      var arg = [
-        ['testFile', /Roses are red/],
-        ['testFile2', /Violets are blue/]
-      ];
-      assert.doesNotThrow(yoAssert.files.bind(yoAssert, arg));
-    });
-
-    it('reject an array of file/regex pairs when one file\'s content does not matches the corresponding regex', function () {
-      var arg = [
-        ['testFile', /Roses are red/],
-        ['testFile2', /Violets are orange/]
-      ];
-      assert.throws(yoAssert.files.bind(yoAssert, arg));
-    });
-  });
-
   describe('.fileContent()', function () {
     it('accept a file and regex when the file content matches the regex', function () {
       assert.doesNotThrow(yoAssert.fileContent.bind(yoAssert, 'testFile', /Roses are red/));
