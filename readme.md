@@ -124,7 +124,7 @@ assert.textEqual('I have a yellow cat', 'I have a yellow cat');
 Assert an Object implements an interface.
 
 ```js
-yoAssert.notImplement(fs, ['readFile']);
+assert.notImplement(fs, ['readFile']);
 ```
 
 
@@ -136,7 +136,7 @@ yoAssert.notImplement(fs, ['readFile']);
 Assert an Object doesn't implements any method of an interface.
 
 ```js
-yoAssert.notImplement(fs, ['foo']);
+assert.notImplement(fs, ['foo']);
 ```
 
 
