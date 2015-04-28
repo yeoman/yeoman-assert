@@ -39,6 +39,7 @@ var assert = module.exports = require('assert');
 assert.file = function () {
   var args = _.toArray(arguments);
   args = _.isString(args[0]) ? args : args[0];
+
   args.forEach(function (file) {
     var here = fs.existsSync(file);
     assert.ok(here, file + ', no such file or directory');
@@ -62,6 +63,7 @@ assert.file = function () {
 assert.noFile = function () {
   var args = _.toArray(arguments);
   args = _.isString(args[0]) ? args : args[0];
+
   args.forEach(function (file) {
     var here = fs.existsSync(file);
     assert.ok(!here, file + ' exists');
@@ -91,16 +93,19 @@ assert.noFile = function () {
 assert.fileContent = function () {
   var args = _.toArray(arguments);
   var pairs = _.isString(args[0]) ? [args] : args[0];
+
   pairs.forEach(function (pair) {
     var file = pair[0];
     var regex = pair[1];
     assert.file(file);
     var body = fs.readFileSync(file, 'utf8');
+
     if (typeof regex === 'string') {
       assert.ok(body.indexOf(regex) > -1, file + ' did not match \'' + regex + '\'.');
-    } else {
-      assert.ok(regex.test(body), file + ' did not match \'' + regex + '\'.');
+      return;
     }
+
+    assert.ok(regex.test(body), file + ' did not match \'' + regex + '\'.');
   });
 };
 
@@ -126,16 +131,19 @@ assert.fileContent = function () {
 assert.noFileContent = function () {
   var args = _.toArray(arguments);
   var pairs = _.isString(args[0]) ? [args] : args[0];
+
   pairs.forEach(function (pair) {
     var file = pair[0];
     var regex = pair[1];
     assert.file(file);
     var body = fs.readFileSync(file, 'utf8');
+
     if (typeof regex === 'string') {
       assert.ok(body.indexOf(regex) === -1, file + ' matched \'' + regex + '\'.');
-    } else {
-      assert.ok(!regex.test(body), file + ' matched \'' + regex + '\'.');
+      return;
     }
+
+    assert.ok(!regex.test(body), file + ' matched \'' + regex + '\'.');
   });
 };
 
