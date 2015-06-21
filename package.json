@@ -22,7 +22,8 @@
     "test": "jshint *.js && jscs *.js && mocha"
   },
   "dependencies": {
-    "lodash": "^3.6.0"
+    "lodash": "^3.6.0",
+    "path-exists": "^1.0.0"
   },
   "devDependencies": {
     "jscs": "^1.12.0",

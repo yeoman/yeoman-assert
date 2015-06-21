@@ -12,6 +12,7 @@
 
 var fs = require('fs');
 var _ = require('lodash');
+var pathExists = require('path-exists');
 
 function extractMethods(methods) {
   return _.isArray(methods) ? methods : Object.keys(methods).filter(function (method) {
@@ -41,7 +42,7 @@ assert.file = function () {
   args = _.isString(args[0]) ? args : args[0];
 
   args.forEach(function (file) {
-    var here = fs.existsSync(file);
+    var here = pathExists.sync(file);
     assert.ok(here, file + ', no such file or directory');
   });
 };
@@ -65,7 +66,7 @@ assert.noFile = function () {
   args = _.isString(args[0]) ? args : args[0];
 
   args.forEach(function (file) {
-    var here = fs.existsSync(file);
+    var here = pathExists.sync(file);
     assert.ok(!here, file + ' exists');
   });
 };
