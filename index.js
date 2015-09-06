@@ -197,3 +197,31 @@ assert.notImplement = function (subject, methods) {
 
   assert.ok(pass.length === 0, 'expected object to not implement any methods named: ' + pass.join(', '));
 };
+
+/**
+ * Assert an object contains the provided keys
+ * @param {Object} obj Object that should match the given pattern
+ * @param {Object} content An object of key/values the object should contains
+ */
+
+assert.objectContent = function (obj, content) {
+  Object.keys(content).forEach(function (key) {
+    if (typeof content[key] === 'object') {
+      assert.objectContent(obj[key], content[key]);
+      return;
+    }
+
+    assert.equal(content[key], obj[key]);
+  });
+};
+
+/**
+ * Assert a JSON file contains the provided keys
+ * @param {String} filename
+ * @param {Object} content An object of key/values the file should contains
+ */
+
+assert.JSONFileContent = function (filename, content) {
+  var obj = JSON.parse(fs.readFileSync(filename, 'utf8'));
+  assert.objectContent(obj, content);
+};

@@ -165,4 +165,74 @@ describe('yeoman-assert', function () {
       assert.throws(yoAssert.notImplement.bind(yoAssert, this.subject, ['foo']));
     });
   });
+
+  describe('.objectContent()', function () {
+    it('pass if object contains the keys', function () {
+      assert.doesNotThrow(yoAssert.objectContent.bind(yoAssert, {
+        a: 'foo'
+      }, {
+        a: 'foo'
+      }));
+    });
+
+    it('pass if object contains nested objects and arrays', function () {
+      assert.doesNotThrow(yoAssert.objectContent.bind(yoAssert, {
+        a: { b: 'foo' },
+        b: [0, 'a'],
+        c: 'a'
+      }, {
+        a: { b: 'foo' },
+        b: [0, 'a']
+      }));
+    });
+
+    it('pass if array is incomplete', function () {
+      assert.doesNotThrow(yoAssert.objectContent.bind(yoAssert, {
+        b: [0, 'a'],
+      }, {
+        b: [0]
+      }));
+    });
+
+    it('fails if object does not contain a key', function () {
+      assert.throws(yoAssert.objectContent.bind(yoAssert, {}, {
+        a: 'foo'
+      }));
+    });
+
+    it('fails if nested object does not contain a key', function () {
+      assert.throws(yoAssert.objectContent.bind(yoAssert, {
+        a: {}
+      }, {
+        a: { b: 'foo' }
+      }));
+    });
+  });
+
+  describe('.JSONFileContent()', function () {
+    var file = path.join(__dirname, 'fixtures/dummy.json');
+
+    it('pass if file contains the keys', function () {
+      assert.doesNotThrow(yoAssert.JSONFileContent.bind(yoAssert, file, {
+        a: { b: 1 },
+        b: [1, 2]
+      }));
+    });
+
+    it('fails if file does not contain the keys', function () {
+      assert.throws(yoAssert.JSONFileContent.bind(yoAssert, file, {
+        a: { b: 1 },
+        b: 'a'
+      }));
+
+      assert.throws(yoAssert.JSONFileContent.bind(yoAssert, file, {
+        a: { b: 3 },
+        b: [1]
+      }));
+    });
+
+    it('fails if file does not exists', function () {
+      assert.throws(yoAssert.JSONFileContent.bind(yoAssert, 'does-not-exist', {}));
+    });
+  });
 });
