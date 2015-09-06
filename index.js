@@ -101,12 +101,14 @@ assert.fileContent = function () {
     assert.file(file);
     var body = fs.readFileSync(file, 'utf8');
 
+    var match = false;
     if (typeof regex === 'string') {
-      assert.ok(body.indexOf(regex) > -1, file + ' did not match \'' + regex + '\'.');
-      return;
+      match = body.indexOf(regex) > -1;
+    } else {
+      match = regex.test(body);
     }
 
-    assert.ok(regex.test(body), file + ' did not match \'' + regex + '\'.');
+    assert(match, file + ' did not match \'' + regex + '\'. Contained:\n\n' + body);
   });
 };
 
