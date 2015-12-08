@@ -209,30 +209,30 @@ describe('yeoman-assert', function () {
     });
   });
 
-  describe('.JSONFileContent()', function () {
+  describe('.jsonFileContent()', function () {
     var file = path.join(__dirname, 'fixtures/dummy.json');
 
     it('pass if file contains the keys', function () {
-      assert.doesNotThrow(yoAssert.JSONFileContent.bind(yoAssert, file, {
+      assert.doesNotThrow(yoAssert.jsonFileContent.bind(yoAssert, file, {
         a: { b: 1 },
         b: [1, 2]
       }));
     });
 
     it('fails if file does not contain the keys', function () {
-      assert.throws(yoAssert.JSONFileContent.bind(yoAssert, file, {
+      assert.throws(yoAssert.jsonFileContent.bind(yoAssert, file, {
         a: { b: 1 },
         b: 'a'
       }));
 
-      assert.throws(yoAssert.JSONFileContent.bind(yoAssert, file, {
+      assert.throws(yoAssert.jsonFileContent.bind(yoAssert, file, {
         a: { b: 3 },
         b: [1]
       }));
     });
 
     it('fails if file does not exists', function () {
-      assert.throws(yoAssert.JSONFileContent.bind(yoAssert, 'does-not-exist', {}));
+      assert.throws(yoAssert.jsonFileContent.bind(yoAssert, 'does-not-exist', {}));
     });
   });
 });
