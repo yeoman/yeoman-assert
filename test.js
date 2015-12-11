@@ -1,4 +1,3 @@
-/*global it, describe, before, beforeEach */
 'use strict';
 var path = require('path');
 var assert = require('assert');
@@ -123,7 +122,7 @@ describe('yeoman-assert', function () {
 
   describe('.implement()', function () {
     beforeEach(function () {
-      this.subject = { foo: noop, bar: noop };
+      this.subject = {foo: noop, bar: noop};
       this.interfaceSome = ['foo'];
       this.interfaceComplete = ['foo', 'bar'];
       this.interfaceMore = ['foo', 'yo'];
@@ -139,21 +138,21 @@ describe('yeoman-assert', function () {
     });
 
     it('allow interface to be an object (using its object.keys)', function () {
-      var interfacePass = { foo: noop };
-      var interfaceFail = { yop: noop };
+      var interfacePass = {foo: noop};
+      var interfaceFail = {yop: noop};
       assert.doesNotThrow(yoAssert.implement.bind(yoAssert, this.subject, interfacePass));
       assert.throws(yoAssert.implement.bind(yoAssert, this.subject, interfaceFail));
     });
 
     it('when object is passed in, it only check it implements the methods', function () {
-      var expected = { foo: noop, yop: 'some arg' };
+      var expected = {foo: noop, yop: 'some arg'};
       assert.doesNotThrow(yoAssert.implement.bind(yoAssert, this.subject, expected));
     });
   });
 
   describe('.notImplement()', function () {
     beforeEach(function () {
-      this.subject = { foo: noop, bar: noop };
+      this.subject = {foo: noop, bar: noop};
       this.interfaceSome = ['foo'];
     });
 
@@ -177,18 +176,18 @@ describe('yeoman-assert', function () {
 
     it('pass if object contains nested objects and arrays', function () {
       assert.doesNotThrow(yoAssert.objectContent.bind(yoAssert, {
-        a: { b: 'foo' },
+        a: {b: 'foo'},
         b: [0, 'a'],
         c: 'a'
       }, {
-        a: { b: 'foo' },
+        a: {b: 'foo'},
         b: [0, 'a']
       }));
     });
 
     it('pass if array is incomplete', function () {
       assert.doesNotThrow(yoAssert.objectContent.bind(yoAssert, {
-        b: [0, 'a'],
+        b: [0, 'a']
       }, {
         b: [0]
       }));
@@ -204,7 +203,7 @@ describe('yeoman-assert', function () {
       assert.throws(yoAssert.objectContent.bind(yoAssert, {
         a: {}
       }, {
-        a: { b: 'foo' }
+        a: {b: 'foo'}
       }));
     });
   });
@@ -214,19 +213,19 @@ describe('yeoman-assert', function () {
 
     it('pass if file contains the keys', function () {
       assert.doesNotThrow(yoAssert.jsonFileContent.bind(yoAssert, file, {
-        a: { b: 1 },
+        a: {b: 1},
         b: [1, 2]
       }));
     });
 
     it('fails if file does not contain the keys', function () {
       assert.throws(yoAssert.jsonFileContent.bind(yoAssert, file, {
-        a: { b: 1 },
+        a: {b: 1},
         b: 'a'
       }));
 
       assert.throws(yoAssert.jsonFileContent.bind(yoAssert, file, {
-        a: { b: 3 },
+        a: {b: 3},
         b: [1]
       }));
     });
