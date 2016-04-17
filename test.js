@@ -208,6 +208,49 @@ describe('yeoman-assert', function () {
     });
   });
 
+  describe('.noObjectContent()', function () {
+    it('fails if object contains the keys', function () {
+      assert.throws(yoAssert.noObjectContent.bind(yoAssert, {
+        a: 'foo'
+      }, {
+        a: 'foo'
+      }));
+    });
+
+    it('pass if object contains nested objects and arrays', function () {
+      assert.throws(yoAssert.noObjectContent.bind(yoAssert, {
+        a: {b: 'foo'},
+        b: [0, 'a'],
+        c: 'a'
+      }, {
+        a: {b: 'foo'},
+        b: [0, 'a']
+      }));
+    });
+
+    it('pass if array is incomplete', function () {
+      assert.throws(yoAssert.noObjectContent.bind(yoAssert, {
+        b: [0, 'a']
+      }, {
+        b: [0]
+      }));
+    });
+
+    it('pass if object does not contain a key', function () {
+      assert.doesNotThrow(yoAssert.noObjectContent.bind(yoAssert, {}, {
+        a: 'foo'
+      }));
+    });
+
+    it('pass if nested object does not contain a key', function () {
+      assert.doesNotThrow(yoAssert.noObjectContent.bind(yoAssert, {
+        a: {}
+      }, {
+        a: {b: 'foo'}
+      }));
+    });
+  });
+
   describe('.jsonFileContent()', function () {
     var file = path.join(__dirname, 'fixtures/dummy.json');
 
@@ -232,6 +275,33 @@ describe('yeoman-assert', function () {
 
     it('fails if file does not exists', function () {
       assert.throws(yoAssert.jsonFileContent.bind(yoAssert, 'does-not-exist', {}));
+    });
+  });
+
+  describe('.noJsonFileContent()', function () {
+    var file = path.join(__dirname, 'fixtures/dummy.json');
+
+    it('fails if file contains the keys', function () {
+      assert.throws(yoAssert.noJsonFileContent.bind(yoAssert, file, {
+        a: {b: 1},
+        b: [1, 2]
+      }));
+    });
+
+    it('pass if file does not contain the keys', function () {
+      assert.doesNotThrow(yoAssert.noJsonFileContent.bind(yoAssert, file, {
+        c: {b: 1},
+        b: 'a'
+      }));
+
+      assert.doesNotThrow(yoAssert.noJsonFileContent.bind(yoAssert, file, {
+        a: {b: 3},
+        b: [2]
+      }));
+    });
+
+    it('fails if file does not exists', function () {
+      assert.throws(yoAssert.noJsonFileContent.bind(yoAssert, 'does-not-exist', {}));
     });
   });
 });
