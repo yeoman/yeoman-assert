@@ -254,6 +254,10 @@ describe('yeoman-assert', function () {
   describe('.jsonFileContent()', function () {
     var file = path.join(__dirname, 'fixtures/dummy.json');
 
+    it('is aliased to .JSONFileContent()', function () {
+      assert(yoAssert.jsonFileContent === yoAssert.JSONFileContent);
+    });
+
     it('pass if file contains the keys', function () {
       assert.doesNotThrow(yoAssert.jsonFileContent.bind(yoAssert, file, {
         a: {b: 1},
@@ -280,6 +284,10 @@ describe('yeoman-assert', function () {
 
   describe('.noJsonFileContent()', function () {
     var file = path.join(__dirname, 'fixtures/dummy.json');
+
+    it('is aliased to .noJSONFileContent()', function () {
+      assert(yoAssert.noJsonFileContent === yoAssert.noJSONFileContent);
+    });
 
     it('fails if file contains the keys', function () {
       assert.throws(yoAssert.noJsonFileContent.bind(yoAssert, file, {
