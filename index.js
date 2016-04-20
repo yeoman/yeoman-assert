@@ -249,7 +249,7 @@ assert.JSONFileContent = assert.jsonFileContent = function (filename, content) {
  * @param {Object} content An object of key/values the file should not contain
  */
 
-assert.JSONFileContent = assert.noJsonFileContent = function (filename, content) {
+assert.noJSONFileContent = assert.noJsonFileContent = function (filename, content) {
   var obj = JSON.parse(fs.readFileSync(filename, 'utf8'));
   assert.noObjectContent(obj, content);
 };
