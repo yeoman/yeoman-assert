@@ -127,12 +127,14 @@ describe('yeoman-assert', function () {
         'I have a yellow cat'
       ));
     });
+
     it('fails with two different simple lines', function () {
       assert.throws(yoAssert.textEqual.bind(yoAssert,
         'I have a yellow cat',
         'I have a brown cat'
       ));
     });
+
     it('pass with two similar simple lines with different new line types', function () {
       assert.doesNotThrow(yoAssert.textEqual.bind(yoAssert,
         'I have a\nyellow cat',
