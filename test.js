@@ -120,6 +120,29 @@ describe('yeoman-assert', function () {
     });
   });
 
+  describe('.textEqual()', function () {
+    it('pass with two similar simple lines', function () {
+      assert.doesNotThrow(yoAssert.textEqual.bind(yoAssert,
+        'I have a yellow cat',
+        'I have a yellow cat'
+      ));
+    });
+
+    it('fails with two different simple lines', function () {
+      assert.throws(yoAssert.textEqual.bind(yoAssert,
+        'I have a yellow cat',
+        'I have a brown cat'
+      ));
+    });
+
+    it('pass with two similar simple lines with different new line types', function () {
+      assert.doesNotThrow(yoAssert.textEqual.bind(yoAssert,
+        'I have a\nyellow cat',
+        'I have a\r\nyellow cat'
+      ));
+    });
+  });
+
   describe('.implement()', function () {
     beforeEach(function () {
       this.subject = {foo: noop, bar: noop};
