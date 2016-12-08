@@ -11,13 +11,31 @@
 'use strict';
 
 var fs = require('fs');
-var _ = require('lodash');
-var pathExists = require('path-exists');
+var toArray = require('lodash.toarray');
+var pathExists = fs.existsSync;
+
+function isFunction(obj) {
+  return typeof obj === 'function';
+}
 
 function extractMethods(methods) {
-  return _.isArray(methods) ? methods : Object.keys(methods).filter(function (method) {
-    return _.isFunction(methods[method]);
-  });
+  return Array.isArray(methods) ?
+    methods : Object.keys(methods).filter(function (method) {
+      return isFunction(methods[method]);
+    });
+}
+
+function convertArgs(args) {
+  if (args.length > 1) {
+    return [toArray(args)];
+  }
+  var arg = args[0];
+  return Array.isArray(arg) ? arg : [arg];
+}
+
+function readFile(filename, json) {
+  var file = fs.readFileSync(filename, 'utf8');
+  return json ? JSON.parse(file) : file;
 }
 
 // Extend the native assert module
@@ -25,7 +43,7 @@ var assert = module.exports = require('assert');
 
 /**
  * Assert that a file exists
- * @param  {String}       path     - path to a file
+ * @param {String}       path     - path to a file
  * @example
  * assert.file('templates/user.hbs');
  *
@@ -38,18 +56,15 @@ var assert = module.exports = require('assert');
  */
 
 assert.file = function () {
-  var args = _.toArray(arguments);
-  args = _.isString(args[0]) ? args : args[0];
-
-  args.forEach(function (file) {
-    var here = pathExists.sync(file);
+  convertArgs(arguments).forEach(function (file) {
+    var here = pathExists(file);
     assert.ok(here, file + ', no such file or directory');
   });
 };
 
 /**
  * Assert that a file doesn't exist
- * @param  {String}       file     - path to a file
+ * @param {String}       file     - path to a file
  * @example
  * assert.noFile('templates/user.hbs');
  *
@@ -62,19 +77,16 @@ assert.file = function () {
  */
 
 assert.noFile = function () {
-  var args = _.toArray(arguments);
-  args = _.isString(args[0]) ? args : args[0];
-
-  args.forEach(function (file) {
-    var here = pathExists.sync(file);
+  convertArgs(arguments).forEach(function (file) {
+    var here = pathExists(file);
     assert.ok(!here, file + ' exists');
   });
 };
 
 /**
  * Assert that a file's content matches a regex or string
- * @param  {String}       file     - path to a file
- * @param  {Regex|String} reg      - regex / string that will be used to search the file
+ * @param {String}       file     - path to a file
+ * @param {Regex|String} reg      - regex / string that will be used to search the file
  * @example
  * assert.fileContent('models/user.js', /App\.User = DS\.Model\.extend/);
  * assert.fileContent('models/user.js', 'App.User = DS.Model.extend');
@@ -92,14 +104,11 @@ assert.noFile = function () {
  */
 
 assert.fileContent = function () {
-  var args = _.toArray(arguments);
-  var pairs = _.isString(args[0]) ? [args] : args[0];
-
-  pairs.forEach(function (pair) {
+  convertArgs(arguments).forEach(function (pair) {
     var file = pair[0];
     var regex = pair[1];
     assert.file(file);
-    var body = fs.readFileSync(file, 'utf8');
+    var body = readFile(file);
 
     var match = false;
     if (typeof regex === 'string') {
@@ -114,8 +123,8 @@ assert.fileContent = function () {
 
 /**
  * Assert that a file's content does not match a regex / string
- * @param  {String}       file     - path to a file
- * @param  {Regex|String} reg      - regex / string that will be used to search the file
+ * @param {String}       file     - path to a file
+ * @param {Regex|String} reg      - regex / string that will be used to search the file
  * @example
  * assert.noFileContent('models/user.js', /App\.User = DS\.Model\.extend/);
  * assert.noFileContent('models/user.js', 'App.User = DS.Model.extend');
@@ -132,14 +141,11 @@ assert.fileContent = function () {
  */
 
 assert.noFileContent = function () {
-  var args = _.toArray(arguments);
-  var pairs = _.isString(args[0]) ? [args] : args[0];
-
-  pairs.forEach(function (pair) {
+  convertArgs(arguments).forEach(function (pair) {
     var file = pair[0];
     var regex = pair[1];
     assert.file(file);
-    var body = fs.readFileSync(file, 'utf8');
+    var body = readFile(file);
 
     if (typeof regex === 'string') {
       assert.ok(body.indexOf(regex) === -1, file + ' matched \'' + regex + '\'.');
@@ -152,7 +158,7 @@ assert.noFileContent = function () {
 
 /**
  * Assert that two strings are equal after standardization of newlines
- * @param {String} value - a string
+ * @param {String} value    - a string
  * @param {String} expected - the expected value of the string
  * @example
  * assert.textEqual('I have a yellow cat', 'I have a yellow cat');
@@ -168,15 +174,13 @@ assert.textEqual = function (value, expected) {
 
 /**
  * Assert an Object implements an interface
- * @param  {Object}       subject - subject implementing the façade
- * @param  {Object|Array} methods - a façace, hash or array of keys to be implemented
+ * @param {Object}       subject - subject implementing the façade
+ * @param {Object|Array} methods - a façace, hash or array of keys to be implemented
  */
 
 assert.implement = function (subject, methods) {
-  methods = extractMethods(methods);
-
-  var pass = methods.filter(function (method) {
-    return !_.isFunction(subject[method]);
+  var pass = extractMethods(methods).filter(function (method) {
+    return !isFunction(subject[method]);
   });
 
   assert.ok(pass.length === 0, 'expected object to implement methods named: ' + pass.join(', '));
@@ -184,15 +188,13 @@ assert.implement = function (subject, methods) {
 
 /**
  * Assert an Object doesn't implements any method of an interface
- * @param  {Object}       subject - subject not implementing the methods
- * @param  {Object|Array} methods - hash or array of method names to be implemented
+ * @param {Object}       subject - subject not implementing the methods
+ * @param {Object|Array} methods - hash or array of method names to be implemented
  */
 
 assert.notImplement = function (subject, methods) {
-  methods = extractMethods(methods);
-
-  var pass = methods.filter(function (method) {
-    return _.isFunction(subject[method]);
+  var pass = extractMethods(methods).filter(function (method) {
+    return isFunction(subject[method]);
   });
 
   assert.ok(pass.length === 0, 'expected object to not implement any methods named: ' + pass.join(', '));
@@ -200,8 +202,8 @@ assert.notImplement = function (subject, methods) {
 
 /**
  * Assert an object contains the provided keys
- * @param {Object} obj Object that should match the given pattern
- * @param {Object} content An object of key/values the object should contains
+ * @param {Object} obj      Object that should match the given pattern
+ * @param {Object} content  An object of key/values the object should contains
  */
 
 assert.objectContent = function (obj, content) {
@@ -239,8 +241,7 @@ assert.noObjectContent = function (obj, content) {
  */
 
 assert.JSONFileContent = assert.jsonFileContent = function (filename, content) {
-  var obj = JSON.parse(fs.readFileSync(filename, 'utf8'));
-  assert.objectContent(obj, content);
+  assert.objectContent(readFile(filename, true), content);
 };
 
 /**
@@ -250,6 +251,5 @@ assert.JSONFileContent = assert.jsonFileContent = function (filename, content) {
  */
 
 assert.noJSONFileContent = assert.noJsonFileContent = function (filename, content) {
-  var obj = JSON.parse(fs.readFileSync(filename, 'utf8'));
-  assert.noObjectContent(obj, content);
+  assert.noObjectContent(readFile(filename, true), content);
 };

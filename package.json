@@ -24,8 +24,7 @@
     "prepublish": "gulp prepublish"
   },
   "dependencies": {
-    "lodash": "^3.6.0",
-    "path-exists": "^2.1.0"
+    "lodash.toarray": "^4.4.0"
   },
   "devDependencies": {
     "eslint-config-xo-space": "^0.7.0",
