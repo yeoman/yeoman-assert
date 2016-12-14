@@ -206,7 +206,7 @@ assert.notImplement = function (subject, methods) {
 
 assert.objectContent = function (obj, content) {
   Object.keys(content).forEach(function (key) {
-    if (typeof content[key] === 'object') {
+    if (_.isObject(content[key])) {
       assert.objectContent(obj[key], content[key]);
       return;
     }
@@ -223,7 +223,7 @@ assert.objectContent = function (obj, content) {
 
 assert.noObjectContent = function (obj, content) {
   Object.keys(content).forEach(function (key) {
-    if (typeof content[key] === 'object') {
+    if (_.isObject(content[key])) {
       assert.noObjectContent(obj[key], content[key]);
       return;
     }
