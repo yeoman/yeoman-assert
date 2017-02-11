@@ -2,9 +2,10 @@
 
 `yeoman-assert` is extending the native Node `assert` module. Every methods in `assert` also is available with `yeoman-assert`, plus some code scaffolding related assertion helpers.
 
+
 ## Install
 
-```sh
+```
 $ npm install --save yeoman-assert
 ```
 
@@ -12,12 +13,14 @@ $ npm install --save yeoman-assert
 ## Usage
 
 ```js
-var assert = require('yeoman-assert');
+const assert = require('yeoman-assert');
 
 assert(true);
 assert.equal(1, 1);
 ```
 
+
+## API
 
 ### `assert.file()`
 
@@ -180,6 +183,7 @@ Assert a JSON file does not contain at least a set of keys (rely of `assert.noOb
 ```js
 assert.noJsonFileContent('path/to/file.json', {a: 1});
 ```
+
 
 ## Contribute
 

@@ -2,27 +2,29 @@
   "name": "yeoman-assert",
   "version": "3.0.0",
   "description": "Assert utility from yeoman",
-  "homepage": "http://yeoman.io",
-  "author": "The Yeoman Team",
-  "files": [
-    "index.js"
-  ],
-  "main": "index.js",
-  "keywords": [
-    "assert",
-    "utility",
-    "helper",
-    "yeoman"
-  ],
   "license": "BSD-2-Clause",
   "repository": "yeoman/yeoman-assert",
+  "homepage": "http://yeoman.io",
+  "author": "Yeoman team",
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "gulp",
     "prepublish": "gulp prepublish"
   },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "assert",
+    "assertion",
+    "test",
+    "testing",
+    "utility",
+    "helper",
+    "yeoman"
+  ],
   "devDependencies": {
     "eslint": "^3.15.0",
     "eslint-config-xo-space": "^0.15.0",

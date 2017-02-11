@@ -9,40 +9,32 @@
  *   var assert = require('yeoman-assert');
  */
 'use strict';
+const fs = require('fs');
+const pathExists = fs.existsSync;
 
-var fs = require('fs');
-var pathExists = fs.existsSync;
-
-function isFunction(obj) {
-  return typeof obj === 'function';
-}
-
-function isObject(obj) {
-  return typeof obj === 'object' && obj !== null && obj !== undefined;
-}
+const isFunction = obj => typeof obj === 'function';
+const isObject = obj => typeof obj === 'object' && obj !== null && obj !== undefined;
 
 function extractMethods(methods) {
-  return Array.isArray(methods) ?
-    methods : Object.keys(methods).filter(function (method) {
-      return isFunction(methods[method]);
-    });
+  return Array.isArray(methods) ? methods : Object.keys(methods).filter(method => isFunction(methods[method]));
 }
 
 function convertArgs(args) {
   if (args.length > 1) {
     return [Array.from(args)];
   }
-  var arg = args[0];
+
+  const arg = args[0];
   return Array.isArray(arg) ? arg : [arg];
 }
 
 function readFile(filename, json) {
-  var file = fs.readFileSync(filename, 'utf8');
+  const file = fs.readFileSync(filename, 'utf8');
   return json ? JSON.parse(file) : file;
 }
 
 // Extend the native assert module
-var assert = module.exports = require('assert');
+const assert = module.exports = require('assert');
 
 /**
  * Assert that a file exists
@@ -59,9 +51,9 @@ var assert = module.exports = require('assert');
  */
 
 assert.file = function () {
-  convertArgs(arguments).forEach(function (file) {
-    var here = pathExists(file);
-    assert.ok(here, file + ', no such file or directory');
+  convertArgs(arguments).forEach(file => {
+    const here = pathExists(file);
+    assert.ok(here, `${file}, no such file or directory`);
   });
 };
 
@@ -80,9 +72,9 @@ assert.file = function () {
  */
 
 assert.noFile = function () {
-  convertArgs(arguments).forEach(function (file) {
-    var here = pathExists(file);
-    assert.ok(!here, file + ' exists');
+  convertArgs(arguments).forEach(file => {
+    const here = pathExists(file);
+    assert.ok(!here, `${file} exists`);
   });
 };
 
@@ -107,20 +99,20 @@ assert.noFile = function () {
  */
 
 assert.fileContent = function () {
-  convertArgs(arguments).forEach(function (pair) {
-    var file = pair[0];
-    var regex = pair[1];
+  convertArgs(arguments).forEach(pair => {
+    const file = pair[0];
+    const regex = pair[1];
     assert.file(file);
-    var body = readFile(file);
+    const body = readFile(file);
 
-    var match = false;
+    let match = false;
     if (typeof regex === 'string') {
-      match = body.indexOf(regex) > -1;
+      match = body.indexOf(regex) !== -1;
     } else {
       match = regex.test(body);
     }
 
-    assert(match, file + ' did not match \'' + regex + '\'. Contained:\n\n' + body);
+    assert(match, `${file} did not match '${regex}'. Contained:\n\n${body}`);
   });
 };
 
@@ -144,18 +136,18 @@ assert.fileContent = function () {
  */
 
 assert.noFileContent = function () {
-  convertArgs(arguments).forEach(function (pair) {
-    var file = pair[0];
-    var regex = pair[1];
+  convertArgs(arguments).forEach(pair => {
+    const file = pair[0];
+    const regex = pair[1];
     assert.file(file);
-    var body = readFile(file);
+    const body = readFile(file);
 
     if (typeof regex === 'string') {
-      assert.ok(body.indexOf(regex) === -1, file + ' matched \'' + regex + '\'.');
+      assert.ok(body.indexOf(regex) === -1, `${file} matched '${regex}'.`);
       return;
     }
 
-    assert.ok(!regex.test(body), file + ' matched \'' + regex + '\'.');
+    assert.ok(!regex.test(body), `${file} matched '${regex}'.`);
   });
 };
 
@@ -167,10 +159,8 @@ assert.noFileContent = function () {
  * assert.textEqual('I have a yellow cat', 'I have a yellow cat');
  */
 
-assert.textEqual = function (value, expected) {
-  function eol(str) {
-    return str.replace(/\r\n/g, '\n');
-  }
+assert.textEqual = (value, expected) => {
+  const eol = str => str.replace(/\r\n/g, '\n');
 
   assert.equal(eol(value), eol(expected));
 };
@@ -181,12 +171,10 @@ assert.textEqual = function (value, expected) {
  * @param {Object|Array} methods - a façace, hash or array of keys to be implemented
  */
 
-assert.implement = function (subject, methods) {
-  var pass = extractMethods(methods).filter(function (method) {
-    return !isFunction(subject[method]);
-  });
+assert.implement = (subject, methods) => {
+  const pass = extractMethods(methods).filter(method => !isFunction(subject[method]));
 
-  assert.ok(pass.length === 0, 'expected object to implement methods named: ' + pass.join(', '));
+  assert.ok(pass.length === 0, `expected object to implement methods named: ${pass.join(', ')}`);
 };
 
 /**
@@ -195,12 +183,10 @@ assert.implement = function (subject, methods) {
  * @param {Object|Array} methods - hash or array of method names to be implemented
  */
 
-assert.notImplement = function (subject, methods) {
-  var pass = extractMethods(methods).filter(function (method) {
-    return isFunction(subject[method]);
-  });
+assert.notImplement = (subject, methods) => {
+  const pass = extractMethods(methods).filter(method => isFunction(subject[method]));
 
-  assert.ok(pass.length === 0, 'expected object to not implement any methods named: ' + pass.join(', '));
+  assert.ok(pass.length === 0, `expected object to not implement any methods named: ${pass.join(', ')}`);
 };
 
 /**
@@ -209,8 +195,8 @@ assert.notImplement = function (subject, methods) {
  * @param {Object} content  An object of key/values the object should contains
  */
 
-assert.objectContent = function (obj, content) {
-  Object.keys(content).forEach(function (key) {
+assert.objectContent = (obj, content) => {
+  Object.keys(content).forEach(key => {
     if (isObject(content[key])) {
       assert.objectContent(obj[key], content[key]);
       return;
@@ -226,8 +212,8 @@ assert.objectContent = function (obj, content) {
  * @param {Object} content An object of key/values the object should not contain
  */
 
-assert.noObjectContent = function (obj, content) {
-  Object.keys(content).forEach(function (key) {
+assert.noObjectContent = (obj, content) => {
+  Object.keys(content).forEach(key => {
     if (isObject(content[key])) {
       assert.noObjectContent(obj[key], content[key]);
       return;
@@ -243,7 +229,7 @@ assert.noObjectContent = function (obj, content) {
  * @param {Object} content An object of key/values the file should contains
  */
 
-assert.JSONFileContent = assert.jsonFileContent = function (filename, content) {
+assert.JSONFileContent = assert.jsonFileContent = (filename, content) => {
   assert.objectContent(readFile(filename, true), content);
 };
 
@@ -253,6 +239,6 @@ assert.JSONFileContent = assert.jsonFileContent = function (filename, content) {
  * @param {Object} content An object of key/values the file should not contain
  */
 
-assert.noJSONFileContent = assert.noJsonFileContent = function (filename, content) {
+assert.noJSONFileContent = assert.noJsonFileContent = (filename, content) => {
   assert.noObjectContent(readFile(filename, true), content);
 };
