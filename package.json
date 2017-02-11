@@ -24,16 +24,16 @@
     "prepublish": "gulp prepublish"
   },
   "dependencies": {
-    "lodash": "^3.6.0",
-    "path-exists": "^2.1.0"
+    "lodash": "^4.17.4",
+    "path-exists": "^3.0.0"
   },
   "devDependencies": {
-    "eslint-config-xo-space": "^0.7.0",
+    "eslint-config-xo-space": "^0.15.0",
     "gulp": "^3.9.0",
-    "gulp-eslint": "^1.0.0",
+    "gulp-eslint": "^3.0.1",
     "gulp-exclude-gitignore": "^1.0.0",
-    "gulp-istanbul": "^0.10.3",
-    "gulp-mocha": "^2.0.0",
+    "gulp-istanbul": "^1.1.1",
+    "gulp-mocha": "^3.0.1",
     "gulp-nsp": "^2.1.0",
     "gulp-plumber": "^1.0.0"
   },
