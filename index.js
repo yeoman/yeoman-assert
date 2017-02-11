@@ -11,11 +11,14 @@
 'use strict';
 
 var fs = require('fs');
-var toArray = require('lodash.toarray');
 var pathExists = fs.existsSync;
 
 function isFunction(obj) {
   return typeof obj === 'function';
+}
+
+function isObject(obj) {
+  return typeof obj === 'object' && obj !== null && obj !== undefined;
 }
 
 function extractMethods(methods) {
@@ -27,7 +30,7 @@ function extractMethods(methods) {
 
 function convertArgs(args) {
   if (args.length > 1) {
-    return [toArray(args)];
+    return [Array.from(args)];
   }
   var arg = args[0];
   return Array.isArray(arg) ? arg : [arg];
@@ -208,7 +211,7 @@ assert.notImplement = function (subject, methods) {
 
 assert.objectContent = function (obj, content) {
   Object.keys(content).forEach(function (key) {
-    if (_.isObject(content[key])) {
+    if (isObject(content[key])) {
       assert.objectContent(obj[key], content[key]);
       return;
     }
@@ -225,7 +228,7 @@ assert.objectContent = function (obj, content) {
 
 assert.noObjectContent = function (obj, content) {
   Object.keys(content).forEach(function (key) {
-    if (_.isObject(content[key])) {
+    if (isObject(content[key])) {
       assert.noObjectContent(obj[key], content[key]);
       return;
     }

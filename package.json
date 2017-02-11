@@ -23,9 +23,6 @@
     "test": "gulp",
     "prepublish": "gulp prepublish"
   },
-  "dependencies": {
-    "lodash.toarray": "^4.4.0"
-  },
   "devDependencies": {
     "eslint-config-xo-space": "^0.15.0",
     "gulp": "^3.9.0",
