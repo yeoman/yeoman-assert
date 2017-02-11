@@ -284,7 +284,8 @@ describe('yeoman-assert', function () {
     it('pass if file contains the keys', function () {
       assert.doesNotThrow(yoAssert.jsonFileContent.bind(yoAssert, file, {
         a: {b: 1},
-        b: [1, 2]
+        b: [1, 2],
+        d: null
       }));
     });
 
