@@ -117,6 +117,36 @@ assert.fileContent = function () {
 };
 
 /**
+ * Assert that a file's content is the same as the given string
+ * @param {String}  file            - path to a file
+ * @param {String}  expectedContent - the expected content of the file
+ * @example
+ * assert.equalsFileContent(
+ *   'data.js',
+ *   'const greeting = "Hello";\nexport default { greeting }'
+ * );
+ *
+ * @also
+ *
+ * Assert that each file in an array of file-string pairs equals its corresponding string
+ * @param {Array}   pairs           - an array of arrays, where each subarray is a [String, String] pair
+ * @example
+ * assert.equalsFileContent([
+ *   ['data.js', 'const greeting = "Hello";\nexport default { greeting }'],
+ *   ['user.js', 'export default {\n  name: 'Coleman',\n  age: 0\n}']
+ * ]);
+ */
+
+assert.equalsFileContent = function () {
+  convertArgs(arguments).forEach(pair => {
+    const file = pair[0];
+    const expectedContent = pair[1];
+    assert.file(file);
+    this.textEqual(readFile(file), expectedContent);
+  });
+};
+
+/**
  * Assert that a file's content does not match a regex / string
  * @param {String}       file     - path to a file
  * @param {Regex|String} reg      - regex / string that will be used to search the file

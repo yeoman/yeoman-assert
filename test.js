@@ -86,6 +86,32 @@ describe('yeoman-assert', () => {
     });
   });
 
+  describe('.equalsFileContent()', () => {
+    it('accept a file and string when the file content equals the string', () => {
+      assert.doesNotThrow(yoAssert.equalsFileContent.bind(yoAssert, 'testFile', 'Roses are red.\n'));
+    });
+
+    it('reject a file and string when the file content does not equal the string', () => {
+      assert.throws(yoAssert.equalsFileContent.bind(yoAssert, 'testFile', 'Roses are red'));
+    });
+
+    it('accept an array of file/string pairs when each file\'s content equals the corresponding string', () => {
+      const arg = [
+        ['testFile', 'Roses are red.\n'],
+        ['testFile2', 'Violets are blue.\n']
+      ];
+      assert.doesNotThrow(yoAssert.equalsFileContent.bind(yoAssert, arg));
+    });
+
+    it('reject an array of file/string pairs when one file\'s content does not equal the corresponding string', () => {
+      const arg = [
+        ['testFile', 'Roses are red.\n'],
+        ['testFile2', 'Violets are green.\n']
+      ];
+      assert.throws(yoAssert.equalsFileContent.bind(yoAssert, arg));
+    });
+  });
+
   describe('.noFileContent()', () => {
     it('accept a file and regex when the file content does not match the regex', () => {
       assert.doesNotThrow(yoAssert.noFileContent.bind(yoAssert, 'testFile', /Roses are blue/));
