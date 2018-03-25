@@ -1,12 +1,12 @@
 # yeoman-assert [![Build Status](https://travis-ci.org/yeoman/yeoman-assert.svg?branch=master)](https://travis-ci.org/yeoman/yeoman-assert)
 
-`yeoman-assert` is extending the native Node `assert` module. Every methods in `assert` also is available with `yeoman-assert`, plus some code scaffolding related assertion helpers.
+`yeoman-assert` is extending the native Node.js `assert` module. Every methods in `assert` also is available with `yeoman-assert`, plus some code scaffolding related assertion helpers.
 
 
 ## Install
 
 ```
-$ npm install --save yeoman-assert
+$ npm install yeoman-assert
 ```
 
 
@@ -192,5 +192,4 @@ See the [contributing docs](http://yeoman.io/contributing/).
 
 ## License
 
-[BSD license](http://opensource.org/licenses/bsd-license.php)
-Copyright (c) Google
+BSD-2-Clause © Google
