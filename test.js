@@ -32,6 +32,28 @@ describe('yeoman-assert', () => {
     });
   });
 
+  describe('.fileStrict()', () => {
+    it('accept an array of files all of which exist', () => {
+      assert.doesNotThrow(yoAssert.fileStrict.bind(yoAssert, ['./testFile', 'testFile2', 'dummy.json']));
+    });
+
+    it('reject a file that is not exclusive in folder', () => {
+      assert.throws(yoAssert.fileStrict.bind(yoAssert, 'testFile'));
+    });
+
+    it('reject an array of files all of which are not exclusive in folder', () => {
+      assert.throws(yoAssert.fileStrict.bind(yoAssert, ['./testFile', 'testFile2']));
+    });
+
+    it('reject a file that does not exist', () => {
+      assert.throws(yoAssert.fileStrict.bind(yoAssert, 'etherealTestFile'));
+    });
+
+    it('reject multiple files one of which does not exist', () => {
+      assert.throws(yoAssert.fileStrict.bind(yoAssert, ['./testFile', 'intangibleTestFile']));
+    });
+  });
+
   describe('.noFile()', () => {
     it('accept a file that does not exist', () => {
       assert.doesNotThrow(yoAssert.noFile.bind(yoAssert, 'etherealTestFile'));
