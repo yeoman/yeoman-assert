@@ -10,6 +10,7 @@
  */
 'use strict';
 const fs = require('fs');
+const path = require('path');
 const pathExists = fs.existsSync;
 
 const isFunction = obj => typeof obj === 'function';
@@ -31,6 +32,17 @@ function convertArgs(args) {
 function readFile(filename, json) {
   const file = fs.readFileSync(filename, 'utf8');
   return json ? JSON.parse(file) : file;
+}
+
+function getFiles(dir) {
+  const subdirs = fs.readdirSync(dir);
+  const files = subdirs.map(subdir => {
+    const res = path.resolve(dir, subdir);
+
+    return (fs.statSync(res)).isDirectory() ? getFiles(res) : res;
+  });
+
+  return files.reduce((acc, f) => acc.concat(f), []);
 }
 
 // Extend the native assert module
@@ -55,6 +67,38 @@ assert.file = function () {
     const here = pathExists(file);
     assert.ok(here, `${file}, no such file or directory`);
   });
+};
+
+/**
+ * Assert that the only specified file is exists in the directory
+ * @param {String}       path     - path to a file
+ * @example
+ * assert.fileStrict('templates/user.hbs');
+ *
+ * @also
+ *
+ * Assert that the only specified files are exists in the directory
+ * @param {Array}         paths    - an array of paths to files
+ * @example
+ * assert.fileStrict(['templates/user.hbs', 'templates/user/edit.hbs']);
+ */
+
+assert.fileStrict = function () {
+  const cwd = process.cwd();
+  const allFiles = getFiles(cwd).map(file => path.relative(cwd, file));
+
+  convertArgs(arguments)
+    .map(file => path.normalize(file))
+    .forEach(file => {
+      const index = allFiles.indexOf(file);
+
+      assert.ok(allFiles.splice(index, 1).length > 0, `${file}, no such file or directory`);
+    });
+
+  assert.ok(
+    allFiles.length === 0,
+    `Unspecified files are present in the directory:\n${allFiles.join('\n')}`
+  );
 };
 
 /**
