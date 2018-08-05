@@ -1,6 +1,6 @@
 # yeoman-assert [![Build Status](https://travis-ci.org/yeoman/yeoman-assert.svg?branch=master)](https://travis-ci.org/yeoman/yeoman-assert)
 
-`yeoman-assert` is extending the native Node.js `assert` module. Every methods in `assert` also is available with `yeoman-assert`, plus some code scaffolding related assertion helpers.
+`yeoman-assert` is extending the native Node.js `assert` module. Every method in `assert` also is available with `yeoman-assert`, plus some code scaffolding related assertion helpers.
 
 
 ## Install
@@ -32,7 +32,7 @@ Assert that a file exists.
 assert.file('templates/user.hbs');
 ```
 
-Assert that each files in the array exists.
+Assert that each file in the array exists.
 
 ```js
 assert.file(['templates/user.hbs', 'templates/user/edit.hbs']);
@@ -44,7 +44,7 @@ assert.file(['templates/user.hbs', 'templates/user/edit.hbs']);
 
 - **path** (String|Array) Path to a file.
 
-Assert that a file doesn't exists.
+Assert that a file doesn't exist.
 
 ```js
 assert.noFile('templates/user.hbs');
@@ -127,8 +127,8 @@ assert.textEqual('I have a yellow cat', 'I have a yellow cat');
 
 ### `assert.implement()`
 
-- **subject** (Object) Subject implementing the façade.
-- **methods** (Object|Array) A façace, hash or array of keys to be implemented.
+- **subject** (Object) Subject implementing the facade.
+- **methods** (Object|Array) A facade, hash or array of keys to be implemented.
 
 Assert an Object implements an interface.
 
@@ -142,7 +142,7 @@ assert.implement(fs, ['readFile']);
 - **subject** (Object) Subject not implementing the methods.
 - **methods** (Object|Array) Hash or array of method names to be implemented.
 
-Assert an Object doesn't implements any method of an interface.
+Assert an Object doesn't implement any method of an interface.
 
 ```js
 assert.notImplement(fs, ['foo']);
@@ -150,7 +150,7 @@ assert.notImplement(fs, ['foo']);
 
 ### `assert.objectContent()`
 
-Assert an object contains at least a set of keys
+Assert an object contains at least a set of keys.
 
 ```js
 var anObject = {a: 1};
@@ -160,7 +160,7 @@ assert.objectContent(anObject, {a: 2});
 
 ### `assert.noObjectContent()`
 
-Assert an object does not contain at least a set of keys
+Assert an object does not contain at least a set of keys.
 
 ```js
 var anObject = {a: 1};
@@ -170,7 +170,7 @@ assert.noObjectContent(anObject, {a: 1});
 
 ### `assert.jsonFileContent()`
 
-Assert a JSON file contains at least a set of keys (rely of `assert.objectContent()`)
+Assert a JSON file contains at least a set of keys (relies on `assert.objectContent()`).
 
 ```js
 assert.jsonFileContent('path/to/file.json', {a: 2});
@@ -178,7 +178,7 @@ assert.jsonFileContent('path/to/file.json', {a: 2});
 
 ### `assert.noJsonFileContent()`
 
-Assert a JSON file does not contain at least a set of keys (rely of `assert.noObjectContent()`)
+Assert a JSON file does not contain at least a set of keys (relies on `assert.noObjectContent()`).
 
 ```js
 assert.noJsonFileContent('path/to/file.json', {a: 1});
