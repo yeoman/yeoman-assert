@@ -242,6 +242,14 @@ describe('yeoman-assert', () => {
       }));
     });
 
+    it('pass if array is missing but is expected to be empty', () => {
+      assert.doesNotThrow(yoAssert.objectContent.bind(yoAssert, {
+        b: undefined
+      }, {
+        b: []
+      }));
+    });
+
     it('fails if object does not contain a key', () => {
       assert.throws(yoAssert.objectContent.bind(yoAssert, {}, {
         a: 'foo'
@@ -262,7 +270,7 @@ describe('yeoman-assert', () => {
         a: {b: 'foo'}
       }),  /.*AssertionError.*/);
     });
-    it('fails if deep nested array does not contain a key', () => {
+    it('fails if deep nested array does not contain a item', () => {
       assert.throws(yoAssert.objectContent.bind(yoAssert, {
       }, {
         a: [{b: 'foo'}]
@@ -279,7 +287,7 @@ describe('yeoman-assert', () => {
       }), /.*AssertionError.*/);
     });
 
-    it('pass if object contains nested objects and arrays', () => {
+    it('fail if object contains nested objects and arrays', () => {
       assert.throws(yoAssert.noObjectContent.bind(yoAssert, {
         a: {b: 'foo'},
         b: [0, 'a'],
@@ -290,11 +298,19 @@ describe('yeoman-assert', () => {
       }), /.*AssertionError.*/);
     });
 
-    it('pass if array is incomplete', () => {
+    it('fail if array is incomplete', () => {
       assert.throws(yoAssert.noObjectContent.bind(yoAssert, {
         b: [0, 'a']
       }, {
         b: [0]
+      }), /.*AssertionError.*/);
+    });
+
+    it('fail if array is missing but is expected to be not empty', () => {
+      assert.throws(yoAssert.noObjectContent.bind(yoAssert, {
+        b: undefined
+      }, {
+        b: []
       }), /.*AssertionError.*/);
     });
 
