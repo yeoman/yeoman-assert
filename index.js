@@ -227,12 +227,17 @@ assert.notImplement = (subject, methods) => {
 
 assert.objectContent = (obj, content) => {
   Object.keys(content).forEach(key => {
-    if (isObject(content[key])) {
-      assert.objectContent(obj[key], content[key]);
+    let actualValue = obj[key];
+    if (actualValue && isObject(content[key])) {
+      assert.objectContent(actualValue, content[key]);
       return;
     }
 
-    assert.equal(obj[key], content[key]);
+    if (Array.isArray(content[key]) && !content[key].length && actualValue === undefined) {
+      // undefined array and empty array are ok
+      return;
+    }
+    assert.equal(actualValue, content[key]);
   });
 };
 
@@ -244,12 +249,16 @@ assert.objectContent = (obj, content) => {
 
 assert.noObjectContent = (obj, content) => {
   Object.keys(content).forEach(key => {
-    if (isObject(content[key])) {
-      assert.noObjectContent(obj[key], content[key]);
+    let actualValue = obj[key]
+    if (actualValue && isObject(content[key])) {
+      assert.noObjectContent(actualValue, content[key]);
       return;
     }
-
-    assert.notEqual(obj[key], content[key]);
+    if (Array.isArray(content[key]) && !content[key].length && actualValue === undefined) {
+      // undefined array should be not empty
+      assert.fail(`${key} is expected to be not empty`)
+    }
+    assert.notEqual(actualValue, content[key]);
   });
 };
 

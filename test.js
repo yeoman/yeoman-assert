@@ -25,11 +25,11 @@ describe('yeoman-assert', () => {
 
     it('reject a file that does not exist', () => {
       assert.throws(yoAssert.file.bind(yoAssert, 'etherealTestFile'));
-    });
+    }, /.*AssertionError.*/);
 
     it('reject multiple files one of which does not exist', () => {
       assert.throws(yoAssert.file.bind(yoAssert, ['testFile', 'intangibleTestFile']));
-    });
+    }, /.*AssertionError.*/);
   });
 
   describe('.noFile()', () => {
@@ -44,12 +44,12 @@ describe('yeoman-assert', () => {
 
     it('reject a file that exists', () => {
       assert.throws(yoAssert.noFile.bind(yoAssert, 'testFile'));
-    });
+    }, /.*AssertionError.*/);
 
     it('reject an array of files one of which exists', () => {
       assert.throws(
         yoAssert.noFile.bind(yoAssert, ['testFile', 'etherealTestFile']));
-    });
+    }, /.*AssertionError.*/);
   });
 
   describe('.fileContent()', () => {
@@ -62,11 +62,11 @@ describe('yeoman-assert', () => {
     });
 
     it('reject a file and regex when the file content does not match the regex', () => {
-      assert.throws(yoAssert.fileContent.bind(yoAssert, 'testFile', /Roses are blue/));
+      assert.throws(yoAssert.fileContent.bind(yoAssert, 'testFile', /Roses are blue/), /.*AssertionError.*/);
     });
 
     it('reject a file and string when the file content does not contain the string', () => {
-      assert.throws(yoAssert.fileContent.bind(yoAssert, 'testFile', 'Roses are blue'));
+      assert.throws(yoAssert.fileContent.bind(yoAssert, 'testFile', 'Roses are blue'), /.*AssertionError.*/);
     });
 
     it('accept an array of file/regex pairs when each file\'s content matches the corresponding regex', () => {
@@ -82,7 +82,7 @@ describe('yeoman-assert', () => {
         ['testFile', /Roses are red/],
         ['testFile2', /Violets are orange/]
       ];
-      assert.throws(yoAssert.fileContent.bind(yoAssert, arg));
+      assert.throws(yoAssert.fileContent.bind(yoAssert, arg), /.*AssertionError.*/);
     });
   });
 
@@ -92,7 +92,7 @@ describe('yeoman-assert', () => {
     });
 
     it('reject a file and string when the file content does not equal the string', () => {
-      assert.throws(yoAssert.equalsFileContent.bind(yoAssert, 'testFile', 'Roses are red'));
+      assert.throws(yoAssert.equalsFileContent.bind(yoAssert, 'testFile', 'Roses are red'), /.*AssertionError.*/);
     });
 
     it('accept an array of file/string pairs when each file\'s content equals the corresponding string', () => {
@@ -108,7 +108,7 @@ describe('yeoman-assert', () => {
         ['testFile', 'Roses are red.\n'],
         ['testFile2', 'Violets are green.\n']
       ];
-      assert.throws(yoAssert.equalsFileContent.bind(yoAssert, arg));
+      assert.throws(yoAssert.equalsFileContent.bind(yoAssert, arg), /.*AssertionError.*/);
     });
   });
 
@@ -122,11 +122,11 @@ describe('yeoman-assert', () => {
     });
 
     it('reject a file and regex when the file content matches the regex', () => {
-      assert.throws(yoAssert.noFileContent.bind(yoAssert, 'testFile', /Roses are red/));
+      assert.throws(yoAssert.noFileContent.bind(yoAssert, 'testFile', /Roses are red/), /.*AssertionError.*/);
     });
 
     it('reject a file and string when the file content contain the string', () => {
-      assert.throws(yoAssert.noFileContent.bind(yoAssert, 'testFile', 'Roses are red'));
+      assert.throws(yoAssert.noFileContent.bind(yoAssert, 'testFile', 'Roses are red'), /.*AssertionError.*/);
     });
 
     it('accept an array of file/regex pairs when each file\'s content does not match its corresponding regex', () => {
@@ -142,7 +142,7 @@ describe('yeoman-assert', () => {
         ['testFile', /Roses are red/],
         ['testFile2', /Violets are orange/]
       ];
-      assert.throws(yoAssert.noFileContent.bind(yoAssert, arg));
+      assert.throws(yoAssert.noFileContent.bind(yoAssert, arg), /.*AssertionError.*/);
     });
   });
 
@@ -158,8 +158,8 @@ describe('yeoman-assert', () => {
       assert.throws(yoAssert.textEqual.bind(yoAssert,
         'I have a yellow cat',
         'I have a brown cat'
-      ));
-    });
+      ), /.*AssertionError.*/);
+    }, /.*AssertionError.*/);
 
     it('pass with two similar simple lines with different new line types', () => {
       assert.doesNotThrow(yoAssert.textEqual.bind(yoAssert,
@@ -183,14 +183,14 @@ describe('yeoman-assert', () => {
     });
 
     it('fails if methods are missing', function () {
-      assert.throws(yoAssert.implement.bind(yoAssert, this.subject, this.interfaceMore));
+      assert.throws(yoAssert.implement.bind(yoAssert, this.subject, this.interfaceMore), /.*AssertionError.*/);
     });
 
     it('allow interface to be an object (using its object.keys)', function () {
       const interfacePass = {foo: noop};
       const interfaceFail = {yop: noop};
       assert.doesNotThrow(yoAssert.implement.bind(yoAssert, this.subject, interfacePass));
-      assert.throws(yoAssert.implement.bind(yoAssert, this.subject, interfaceFail));
+      assert.throws(yoAssert.implement.bind(yoAssert, this.subject, interfaceFail), /.*AssertionError.*/);
     });
 
     it('when object is passed in, it only check it implements the methods', function () {
@@ -210,7 +210,7 @@ describe('yeoman-assert', () => {
     });
 
     it('fails if methods are present', function () {
-      assert.throws(yoAssert.notImplement.bind(yoAssert, this.subject, ['foo']));
+      assert.throws(yoAssert.notImplement.bind(yoAssert, this.subject, ['foo']), /.*AssertionError.*/);
     });
   });
 
@@ -242,10 +242,18 @@ describe('yeoman-assert', () => {
       }));
     });
 
+    it('pass if array is missing but is expected to be empty', () => {
+      assert.doesNotThrow(yoAssert.objectContent.bind(yoAssert, {
+        b: undefined
+      }, {
+        b: []
+      }));
+    });
+
     it('fails if object does not contain a key', () => {
       assert.throws(yoAssert.objectContent.bind(yoAssert, {}, {
         a: 'foo'
-      }));
+      }), /.*AssertionError.*/);
     });
 
     it('fails if nested object does not contain a key', () => {
@@ -253,7 +261,20 @@ describe('yeoman-assert', () => {
         a: {}
       }, {
         a: {b: 'foo'}
-      }));
+      }),  /.*AssertionError.*/);
+    });
+
+    it('fails if deep nested object does not contain a key', () => {
+      assert.throws(yoAssert.objectContent.bind(yoAssert, {
+      }, {
+        a: {b: 'foo'}
+      }),  /.*AssertionError.*/);
+    });
+    it('fails if deep nested array does not contain a item', () => {
+      assert.throws(yoAssert.objectContent.bind(yoAssert, {
+      }, {
+        a: [{b: 'foo'}]
+      }), /.*AssertionError.*/);
     });
   });
 
@@ -263,10 +284,10 @@ describe('yeoman-assert', () => {
         a: 'foo'
       }, {
         a: 'foo'
-      }));
+      }), /.*AssertionError.*/);
     });
 
-    it('pass if object contains nested objects and arrays', () => {
+    it('fail if object contains nested objects and arrays', () => {
       assert.throws(yoAssert.noObjectContent.bind(yoAssert, {
         a: {b: 'foo'},
         b: [0, 'a'],
@@ -274,21 +295,29 @@ describe('yeoman-assert', () => {
       }, {
         a: {b: 'foo'},
         b: [0, 'a']
-      }));
+      }), /.*AssertionError.*/);
     });
 
-    it('pass if array is incomplete', () => {
+    it('fail if array is incomplete', () => {
       assert.throws(yoAssert.noObjectContent.bind(yoAssert, {
         b: [0, 'a']
       }, {
         b: [0]
-      }));
+      }), /.*AssertionError.*/);
+    });
+
+    it('fail if array is missing but is expected to be not empty', () => {
+      assert.throws(yoAssert.noObjectContent.bind(yoAssert, {
+        b: undefined
+      }, {
+        b: []
+      }), /.*AssertionError.*/);
     });
 
     it('pass if object does not contain a key', () => {
       assert.doesNotThrow(yoAssert.noObjectContent.bind(yoAssert, {}, {
         a: 'foo'
-      }));
+      }), /.*AssertionError.*/);
     });
 
     it('pass if nested object does not contain a key', () => {
@@ -298,6 +327,21 @@ describe('yeoman-assert', () => {
         a: {b: 'foo'}
       }));
     });
+
+    it('pass if deep nested object does not contain a key', () => {
+      assert.doesNotThrow(yoAssert.noObjectContent.bind(yoAssert, {
+      }, {
+        a: {b: 'foo'}
+      }));
+    });
+
+    it('pass if deep nested array does not contain a key', () => {
+      assert.doesNotThrow(yoAssert.noObjectContent.bind(yoAssert, {
+      }, {
+        a: [{b: 'foo'}]
+      }));
+    });
+
   });
 
   describe('.jsonFileContent()', () => {
@@ -319,16 +363,16 @@ describe('yeoman-assert', () => {
       assert.throws(yoAssert.jsonFileContent.bind(yoAssert, file, {
         a: {b: 1},
         b: 'a'
-      }));
+      }), /.*AssertionError.*/);
 
       assert.throws(yoAssert.jsonFileContent.bind(yoAssert, file, {
         a: {b: 3},
         b: [1]
-      }));
+      }), /.*AssertionError.*/);
     });
 
     it('fails if file does not exists', () => {
-      assert.throws(yoAssert.jsonFileContent.bind(yoAssert, 'does-not-exist', {}));
+      assert.throws(yoAssert.jsonFileContent.bind(yoAssert, 'does-not-exist', {}), /.*no such file or directory*/);
     });
   });
 
@@ -343,7 +387,7 @@ describe('yeoman-assert', () => {
       assert.throws(yoAssert.noJsonFileContent.bind(yoAssert, file, {
         a: {b: 1},
         b: [1, 2]
-      }));
+      }), /.*AssertionError.*/);
     });
 
     it('pass if file does not contain the keys', () => {
@@ -359,7 +403,7 @@ describe('yeoman-assert', () => {
     });
 
     it('fails if file does not exists', () => {
-      assert.throws(yoAssert.noJsonFileContent.bind(yoAssert, 'does-not-exist', {}));
+      assert.throws(yoAssert.noJsonFileContent.bind(yoAssert, 'does-not-exist', {}), /.*no such file or directory*/);
     });
   });
 });
