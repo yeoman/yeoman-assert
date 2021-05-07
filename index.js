@@ -227,12 +227,13 @@ assert.notImplement = (subject, methods) => {
 
 assert.objectContent = (obj, content) => {
   Object.keys(content).forEach(key => {
-    if (isObject(content[key])) {
-      assert.objectContent(obj[key], content[key]);
+    let actualValue = obj[key]
+    if (actualValue && isObject(content[key])) {
+      assert.objectContent(actualValue, content[key]);
       return;
     }
 
-    assert.equal(obj[key], content[key]);
+    assert.equal(actualValue, content[key]);
   });
 };
 
@@ -244,12 +245,13 @@ assert.objectContent = (obj, content) => {
 
 assert.noObjectContent = (obj, content) => {
   Object.keys(content).forEach(key => {
-    if (isObject(content[key])) {
-      assert.noObjectContent(obj[key], content[key]);
+    let actualValue = obj[key]
+    if (actualValue && isObject(content[key])) {
+      assert.noObjectContent(actualValue, content[key]);
       return;
     }
 
-    assert.notEqual(obj[key], content[key]);
+    assert.notEqual(actualValue, content[key]);
   });
 };
 

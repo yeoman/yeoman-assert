@@ -253,7 +253,20 @@ describe('yeoman-assert', () => {
         a: {}
       }, {
         a: {b: 'foo'}
-      }));
+      }),  /.*AssertionError.*/);
+    });
+
+    it('fails if deep nested object does not contain a key', () => {
+      assert.throws(yoAssert.objectContent.bind(yoAssert, {
+      }, {
+        a: {b: 'foo'}
+      }),  /.*AssertionError.*/);
+    });
+    it('fails if deep nested array does not contain a key', () => {
+      assert.throws(yoAssert.objectContent.bind(yoAssert, {
+      }, {
+        a: [{b: 'foo'}]
+      }), /.*AssertionError.*/);
     });
   });
 
@@ -298,6 +311,21 @@ describe('yeoman-assert', () => {
         a: {b: 'foo'}
       }));
     });
+
+    it('pass if deep nested object does not contain a key', () => {
+      assert.doesNotThrow(yoAssert.noObjectContent.bind(yoAssert, {
+      }, {
+        a: {b: 'foo'}
+      }));
+    });
+
+    it('pass if deep nested array does not contain a key', () => {
+      assert.doesNotThrow(yoAssert.noObjectContent.bind(yoAssert, {
+      }, {
+        a: [{b: 'foo'}]
+      }));
+    });
+
   });
 
   describe('.jsonFileContent()', () => {
